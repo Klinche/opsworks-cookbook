@@ -1,0 +1,10 @@
+parameters:
+<% if defined?(@parameters) %>
+<% @parameters.sort_by { |key, val| key }.each do |parameter, value| -%>
+<% if value.to_s.empty? %>
+<%= "    #{parameter}: \"#{value}\"" %>
+<% else %>
+<%= "    #{parameter}: #{value}" %>
+<% end %>
+<% end -%>
+<% end %>

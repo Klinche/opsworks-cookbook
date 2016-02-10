@@ -1,0 +1,29 @@
+<VirtualHost *:80>
+  DocumentRoot <%= @params[:docroot] %>
+  <Directory <%= @params[:docroot] %>>
+    Options +FollowSymLinks +ExecCGI
+    AllowOverride All
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Allow from All
+    </IfModule>
+  </Directory>
+</VirtualHost>
+
+<VirtualHost *:443>
+  DocumentRoot <%= @params[:docroot] %>
+  <Directory <%= @params[:docroot] %>>
+    Options +FollowSymLinks +ExecCGI
+    AllowOverride All
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Allow from All
+    </IfModule>
+  </Directory>
+    SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
+
+</VirtualHost>
