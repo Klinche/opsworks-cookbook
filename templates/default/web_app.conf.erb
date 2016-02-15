@@ -1,4 +1,7 @@
 <VirtualHost *:80>
+  <IfModule mod_http2.c>
+  Protocols h2 http/1.1
+  </IfModule>
   DocumentRoot <%= @params[:docroot] %>
   <Directory <%= @params[:docroot] %>>
     Options +FollowSymLinks +ExecCGI
@@ -13,6 +16,9 @@
 </VirtualHost>
 
 <VirtualHost *:443>
+  <IfModule mod_http2.c>
+  Protocols h2c http/1.1
+  </IfModule>
   DocumentRoot <%= @params[:docroot] %>
   <Directory <%= @params[:docroot] %>>
     Options +FollowSymLinks +ExecCGI
