@@ -33,6 +33,14 @@ script 'Add PHP 5.6 Repository' do
   EOH
 end
 
+script 'Update Apache' do
+  interpreter 'bash'
+  user 'root'
+  code <<-EOH
+    apt-get install -y apache2
+  EOH
+end
+
 # %w{php7.0 php7.0-intl php7.0-mcrypt php7.0-curl php7.0-gd  php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2}.each do |pkg|
 %w{php5 php5-intl php5-mcrypt php5-curl php5-gd php5-mysql php-apc php5-sqlite php5-redis php5-xsl libssh2-php php5-memcache php-pear php5-dev}.each do |pkg|
   script "Reconfigure all outstanding packages in case package before #{pkg} fails us" do
