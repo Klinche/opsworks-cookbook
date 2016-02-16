@@ -37,7 +37,7 @@ script 'Update Apache' do
   interpreter 'bash'
   user 'root'
   code <<-EOH
-    apt-get install -y apache2
+    apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"  install -y apache2
   EOH
 end
 
