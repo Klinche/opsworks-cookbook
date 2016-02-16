@@ -1,5 +1,5 @@
 <VirtualHost *:80>
-  <IfModule mod_http2.c>
+  <IfModule http2_module>
   Protocols h2c http/1.1
   </IfModule>
   DocumentRoot <%= @params[:docroot] %>
@@ -16,7 +16,7 @@
 </VirtualHost>
 
 <VirtualHost *:443>
-  <IfModule mod_http2.c>
+  <IfModule http2_module>
   Protocols h2 http/1.1
   </IfModule>
   DocumentRoot <%= @params[:docroot] %>
