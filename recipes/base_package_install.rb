@@ -2,7 +2,6 @@ script 'update' do
   interpreter 'bash'
   user 'root'
   code <<-EOH
-  sudo rm /var/lib/apt/lists/* -vf
   sudo apt-get update
   EOH
 end
