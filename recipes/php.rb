@@ -32,8 +32,30 @@ script 'Update Apache' do
   EOH
 end
 
-%w{php7.0 php7.0-intl php7.0-mcrypt php7.0-curl php7.0-gd  php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2}.each do |pkg|
-#%w{php5 php5-intl php5-mcrypt php5-curl php5-gd php5-mysql php-apc php5-sqlite php5-redis php5-xsl libssh2-php php5-memcache php-pear php5-dev}.each do |pkg|
+%w{php5 php5-intl php5-mcrypt php5-curl php5-gd php5-mysql php-apc php5-sqlite php5-redis php5-xsl libssh2-php php5-memcache php-pear php5-dev php5-apcu php5-cli php5-common php5-json php5-readline php5-ssh2}.each do |pkg|
+  script "Reconfigure all outstanding packages in case package before #{pkg} fails us" do
+    interpreter 'bash'
+    user 'root'
+    code <<-EOH
+        sudo dpkg --configure -a
+    EOH
+  end
+
+  package pkg do
+    timeout 4000
+    action :purge
+  end
+
+  script "Reconfigure all outstanding packages in case #{pkg} fails us" do
+    interpreter 'bash'
+    user 'root'
+    code <<-EOH
+      sudo dpkg --configure -a
+    EOH
+  end
+end
+
+%w{php7.0 php7.0-intl php7.0-mcrypt php7.0-curl php7.0-gd  php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2 php7.0-xml libapache2-mod-php7.0}.each do |pkg|
   script "Reconfigure all outstanding packages in case package before #{pkg} fails us" do
     interpreter 'bash'
     user 'root'
