@@ -3,11 +3,11 @@ apt_package 'python-software-properties' do
 end
 
 #TODO: Removing php 7.0 for now since some of our composer packages dont support it. http://jira.klinche.com/browse/KI-1062
-script 'Add PHP 7.0 Repository' do
+script 'Add PHP 5.6-7.0 Repository' do
   interpreter 'bash'
   user 'root'
   code <<-EOH
-    add-apt-repository ppa:ondrej/php-7.0 -y
+    add-apt-repository ppa:ondrej/php -y
     apt-get update
   EOH
 end
@@ -23,15 +23,6 @@ script 'Remove PHP 5 directories' do
     rm -rf php5/ || true
   EOH
 end
-
-# script 'Add PHP 5.6 Repository' do
-#   interpreter 'bash'
-#   user 'root'
-#   code <<-EOH
-#     add-apt-repository ppa:ondrej/php5-5.6 -y
-#     apt-get update
-#   EOH
-# end
 
 script 'Update Apache' do
   interpreter 'bash'
