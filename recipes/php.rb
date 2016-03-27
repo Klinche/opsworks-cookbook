@@ -78,21 +78,21 @@ end
   end
 end
 
-script "Remove old PHP" do
+script "Reset Blackfire and NewRelic" do
   interpreter 'bash'
   user 'root'
   code <<-EOH
-      rm -rf /etc/php/5.6
+      sudo mv /etc/php5/mods-available/newrelic.ini /etc/php/7.0/mods-available/ 2>/dev/null || true
+      sudo mv /etc/php5/mods-available/blackfire.ini /etc/php/7.0/mods-available/ 2>/dev/null || true
       rm -rf /etc/php5
-      rm -rf /usr/lib/php5
-      phpenmod blackfire
+      rm -rf /etc/php/5.6
+      ln -s /usr/lib/blackfire-php/amd64/blackfire-20151012.so /usr/lib/php/20151012/blackfire.so
+      sudo ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20151012.so /usr/lib/php/20151012/newrelic.so
       phpenmod newrelic
+      phpenmod blackfire
   EOH
 end
 
-service "apache2" do
-  action: restart
-end
 
 script "Enable MCrypt" do
   interpreter 'bash'
@@ -100,6 +100,10 @@ script "Enable MCrypt" do
   code <<-EOH
       phpenmod mcrypt
   EOH
+end
+
+service "apache2" do
+  action :restart
 end
 
 # php5-xsl php-apc  php5-memcache
