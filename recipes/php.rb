@@ -84,6 +84,7 @@ script "Remove old PHP" do
   code <<-EOH
       rm -rf /etc/php/5.6
       rm -rf /etc/php5
+      rm -rf /usr/lib/php5
       phpenmod blackfire
       phpenmod newrelic
   EOH
