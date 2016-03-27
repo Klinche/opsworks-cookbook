@@ -41,9 +41,12 @@ end
     EOH
   end
 
-  package pkg do
-    timeout 4000
-    action :purge
+  script "Purge packages #{pkg} fails us" do
+    interpreter 'bash'
+    user 'root'
+    code <<-EOH
+        sudo apt-get purge #{pkg} 2>/dev/null || true
+    EOH
   end
 
   script "Reconfigure all outstanding packages in case #{pkg} fails us" do
