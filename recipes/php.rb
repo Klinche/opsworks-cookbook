@@ -86,8 +86,9 @@ script "Reset Blackfire and NewRelic" do
       sudo mv /etc/php5/mods-available/blackfire.ini /etc/php/7.0/mods-available/ 2>/dev/null || true
       rm -rf /etc/php5
       rm -rf /etc/php/5.6
+      rm -rf /usr/lib/php5
       ln -s /usr/lib/blackfire-php/amd64/blackfire-20151012.so /usr/lib/php/20151012/blackfire.so
-      sudo ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20151012.so /usr/lib/php/20151012/newrelic.so
+      ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20151012.so /usr/lib/php/20151012/newrelic.so
       phpenmod newrelic
       phpenmod blackfire
   EOH
