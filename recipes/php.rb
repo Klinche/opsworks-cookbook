@@ -78,6 +78,21 @@ end
   end
 end
 
+script "Remove old PHP" do
+  interpreter 'bash'
+  user 'root'
+  code <<-EOH
+      rm -rf /etc/php/5.6
+      rm -rf /etc/php5
+      phpenmod blackfire
+      phpenmod newrelic
+  EOH
+end
+
+service "apache2" do
+  action: restart
+end
+
 script "Enable MCrypt" do
   interpreter 'bash'
   user 'root'
