@@ -46,7 +46,7 @@ end
     interpreter 'bash'
     user 'root'
     code <<-EOH
-        sudo apt-get purge #{pkg} 2>/dev/null || true
+        sudo apt-get purge -y #{pkg} 2>/dev/null || true
     EOH
   end
 
