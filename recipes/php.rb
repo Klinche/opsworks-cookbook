@@ -8,6 +8,7 @@ script 'Add PHP 5.6-7.0 Repository' do
   user 'root'
   code <<-EOH
     add-apt-repository ppa:ondrej/php -y
+    apt-add-repository ppa:ondrej/apache2 -y
     apt-get update
   EOH
 end
