@@ -55,6 +55,54 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     end
   end
 
+  #NOTE: We do not have any of the other types coded here...
+
+  Chef::Log.info("********** Working on Apache For App: '#{app[:name]}' **********")
+
+  apache_site 'default' do
+    enable false
+  end
+
+  apache_module "http2" do
+    enable true
+  end
+
+  template_name = 'web_app.conf.erb'
+
+  if app['enable_ssl']
+    template_name = 'web_app_ssl.conf.erb'
+
+    file "/etc/apache2/ssl/#{app[:shortname]}.crt" do
+      content app['ssl_configuration']['certificate']
+      owner 'root'
+      group 'root'
+      mode '0644'
+    end
+
+    file "/etc/apache2/ssl/#{app[:shortname]}.key" do
+      content app['ssl_configuration']['private_key']
+      owner 'root'
+      group 'root'
+      mode '0644'
+    end
+
+    file "/etc/apache2/ssl/#{app[:shortname]}_ca.crt" do
+      content app['ssl_configuration']['chain']
+      owner 'root'
+      group 'root'
+      mode '0644'
+    end
+
+  end
+
+  web_app "#{app[:shortname]}" do
+    template template_name
+    server_aliases app['domains']
+    docroot "#{symbolic_release_path}/web"
+    application_name app[:shortname]
+    server_name app[:shortname]
+  end
+
   if is_vagrant == false
 
     Chef::Log.info("********** Getting The App From SCM: '#{app[:name]}' **********")
@@ -110,56 +158,6 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     Chef::Log.info("********** Running Symlink Recipes '#{app[:name]}' **********")
     include_recipe "deploy::before_symlink"
     include_recipe "deploy::after_restart"
-  end
-
-
-
-  #NOTE: We do not have any of the other types coded here...
-
-  Chef::Log.info("********** Working on Apache For App: '#{app[:name]}' **********")
-
-  apache_site 'default' do
-    enable false
-  end
-  
-  apache_module "http2" do
-    enable true
-  end
-
-  template_name = 'web_app.conf.erb'
-
-  if app['enable_ssl']
-    template_name = 'web_app_ssl.conf.erb'
-
-    file "/etc/apache2/ssl/#{app[:shortname]}.crt" do
-      content app['ssl_configuration']['certificate']
-      owner 'root'
-      group 'root'
-      mode '0644'
-    end
-
-    file "/etc/apache2/ssl/#{app[:shortname]}.key" do
-      content app['ssl_configuration']['private_key']
-      owner 'root'
-      group 'root'
-      mode '0644'
-    end
-
-    file "/etc/apache2/ssl/#{app[:shortname]}_ca.crt" do
-      content app['ssl_configuration']['chain']
-      owner 'root'
-      group 'root'
-      mode '0644'
-    end
-
-  end
-
-  web_app "#{app[:shortname]}" do
-    template template_name
-    server_aliases app['domains']
-    docroot "#{symbolic_release_path}/web"
-    application_name app[:shortname]
-    server_name app[:shortname]
   end
 
 end
