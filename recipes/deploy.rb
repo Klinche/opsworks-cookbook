@@ -15,9 +15,12 @@ end
 
 search('aws_opsworks_app', 'deploy:true').each do |app|
   Chef::Log.info("********** Starting To Deploy App: '#{app[:name]}' **********")
+  
+  hostfile_ip = node[:deploy]["#{app[:shortname]}"].key?(:hostfile_entry) ?  node[:deploy]["#{app[:shortname]}"][:hostfile_entry] : '127.0.2.1'  
+  hostfile_name = node[:deploy]["#{app[:shortname]}"].key?(:hostfile_name) ?  node[:deploy]["#{app[:shortname]}"][:hostfile_name] : 'localhost1'  
 
-  hostsfile_entry '127.0.2.1' do
-    hostname  "localhost1"
+  hostsfile_entry hostfile_ip do
+    hostname  hostfile_name
     aliases   app['domains']
     unique    true
     action    :create
