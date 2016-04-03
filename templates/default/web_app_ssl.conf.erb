@@ -2,6 +2,10 @@
   <IfModule http2_module>
   Protocols h2c http/1.1
   </IfModule>
+  ServerName <%= @params[:server_name] %>
+  <% if @params[:server_aliases] -%>
+  ServerAlias <%= @params[:server_aliases].join " " %>
+  <% end -%>
   DocumentRoot <%= @params[:docroot] %>
   <Directory <%= @params[:docroot] %>>
     Options +FollowSymLinks +ExecCGI
@@ -19,6 +23,10 @@
   <IfModule http2_module>
   Protocols h2 http/1.1
   </IfModule>
+  ServerName <%= @params[:server_name] %>
+  <% if @params[:server_aliases] -%>
+  ServerAlias <%= @params[:server_aliases].join " " %>
+  <% end -%>
   DocumentRoot <%= @params[:docroot] %>
   <Directory <%= @params[:docroot] %>>
     Options +FollowSymLinks +ExecCGI
