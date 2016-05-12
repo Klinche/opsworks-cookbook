@@ -60,7 +60,7 @@ end
   end
 end
 
-%w{php7.0 php7.0-intl libsodium-dev php-imagick php7.0-mcrypt php7.0-curl php7.0-gd php7.0-bcmath php7.0-mbstring php7.0-zip php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2 php7.0-xml libapache2-mod-php7.0}.each do |pkg|
+%w{php7.0 php7.0-intl libsodium-dev php-gmagick php-imagick php7.0-mcrypt php7.0-curl php7.0-gd php7.0-bcmath php7.0-mbstring php7.0-zip php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2 php7.0-xml libapache2-mod-php7.0}.each do |pkg|
   script "Reconfigure all outstanding packages in case package before #{pkg} fails us" do
     interpreter 'bash'
     user 'root'
