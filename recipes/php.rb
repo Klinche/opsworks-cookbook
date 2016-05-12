@@ -7,6 +7,7 @@ script 'Add PHP 5.6-7.0 Repository' do
   interpreter 'bash'
   user 'root'
   code <<-EOH
+    add-apt-repository ppa:chris-lea/libsodium -y
     add-apt-repository ppa:ondrej/php -y
     apt-add-repository ppa:ondrej/apache2 -y
     apt-get update
@@ -59,7 +60,7 @@ end
   end
 end
 
-%w{php7.0 php7.0-intl php7.0-mcrypt php7.0-curl php7.0-gd php7.0-bcmath php7.0-zip php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2 php7.0-xml libapache2-mod-php7.0}.each do |pkg|
+%w{php7.0 php7.0-intl libsodium-dev php-imagick php7.0-mcrypt php7.0-curl php7.0-gd php7.0-bcmath php7.0-mbstring php7.0-zip php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2 php7.0-xml libapache2-mod-php7.0}.each do |pkg|
   script "Reconfigure all outstanding packages in case package before #{pkg} fails us" do
     interpreter 'bash'
     user 'root'
@@ -105,6 +106,51 @@ script "Enable MCrypt" do
   code <<-EOH
       phpenmod mcrypt
   EOH
+end
+
+
+template '/etc/php/7.0/mods-available/proctitle.ini' do
+  source 'extension.ini.erb'
+  mode 0666
+  group 'root'
+  owner 'root'
+  variables({
+                :extension_line => 'proctitle.so'
+            })
+end
+
+script "Install Proctitle" do
+  interpreter 'bash'
+  user 'root'
+  code <<-EOH
+      pecl channel-update pecl.php.net
+      pecl install proctitle-alpha
+      phpenmod proctitle
+  EOH
+end
+
+template '/etc/php/7.0/mods-available/libsodium.ini' do
+  source 'extension.ini.erb'
+  mode 0666
+  group 'root'
+  owner 'root'
+  variables({
+                :extension_line => 'libsodium.so'
+            })
+end
+
+script "Install LibSodium" do
+  interpreter 'bash'
+  user 'root'
+  code <<-EOH
+      pecl channel-update pecl.php.net
+      pecl install libsodium
+      phpenmod libsodium
+  EOH
+end
+
+service "php7.0-fpm" do
+  action :restart
 end
 
 service "apache2" do
