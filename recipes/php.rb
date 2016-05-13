@@ -124,7 +124,7 @@ script "Install Proctitle" do
   user 'root'
   code <<-EOH
       pecl channel-update pecl.php.net
-      pecl install proctitle-alpha
+      printf "\n" | pecl install proctitle-alpha
       phpenmod proctitle
   EOH
 end
@@ -144,7 +144,7 @@ script "Install LibSodium" do
   user 'root'
   code <<-EOH
       pecl channel-update pecl.php.net
-      pecl install libsodium
+      printf "\n" | pecl install libsodium
       phpenmod libsodium
   EOH
 end
