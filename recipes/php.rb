@@ -60,7 +60,7 @@ end
   end
 end
 
-%w{php7.0 php7.0-intl libsodium-dev php-gmagick php-imagick php-pear php7.0-mcrypt php7.0-curl php7.0-gd php7.0-bcmath php7.0-mbstring php7.0-zip php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2 php7.0-xml libapache2-mod-php7.0}.each do |pkg|
+%w{php7.0 php7.0-intl php7.0-soap libsodium-dev php-gmagick php-imagick php-pear php7.0-mcrypt php7.0-curl php7.0-gd php7.0-bcmath php7.0-mbstring php7.0-zip php7.0-mysql php-apcu php-apcu-bc php7.0-sqlite3 php-redis php-ssh2 php7.0-xml libapache2-mod-php7.0}.each do |pkg|
   script "Reconfigure all outstanding packages in case package before #{pkg} fails us" do
     interpreter 'bash'
     user 'root'
@@ -149,8 +149,29 @@ script "Install LibSodium" do
   EOH
 end
 
+template '/etc/php/7.0/mods-available/uopz.ini' do
+  source 'extension.ini.erb'
+  mode 0666
+  group 'root'
+  owner 'root'
+  variables({
+                :extension_line => 'uopz.so'
+            })
+end
+
+script "Install uopz" do
+  interpreter 'bash'
+  user 'root'
+  code <<-EOH
+      pecl channel-update pecl.php.net
+      printf "\n" | pecl install uopz
+      phpenmod uopz
+  EOH
+end
+
 service "php7.0-fpm" do
   action :restart
+  only_if { File.exist?("/etc/init.d/php7.0-fpm") }
 end
 
 service "apache2" do
