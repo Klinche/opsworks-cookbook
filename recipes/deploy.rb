@@ -103,7 +103,7 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     server_aliases app['domains']
     docroot "#{symbolic_release_path}/web"
     application_name app[:shortname]
-    server_name app[:shortname]
+    server_name app['domains'].first
   end
 
   if is_vagrant == false
