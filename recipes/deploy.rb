@@ -75,21 +75,21 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
   if app['enable_ssl']
     template_name = 'web_app_ssl.conf.erb'
 
-    file "/etc/apache2/ssl/#{app[:shortname]}.crt" do
+    file "/etc/apache2/ssl/#{app['domains'].first}.crt" do
       content app['ssl_configuration']['certificate']
       owner 'root'
       group 'root'
       mode '0644'
     end
 
-    file "/etc/apache2/ssl/#{app[:shortname]}.key" do
+    file "/etc/apache2/ssl/#{app['domains'].first}.key" do
       content app['ssl_configuration']['private_key']
       owner 'root'
       group 'root'
       mode '0644'
     end
 
-    file "/etc/apache2/ssl/#{app[:shortname]}_ca.crt" do
+    file "/etc/apache2/ssl/#{app['domains'].first}_ca.crt" do
       content app['ssl_configuration']['chain']
       owner 'root'
       group 'root'
