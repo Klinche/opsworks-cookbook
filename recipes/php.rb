@@ -2,6 +2,7 @@ apt_package 'python-software-properties' do
   action :upgrade
 end
 
+ if node['platform'] != 'ubuntu' && node['platform_version'] != '16.04' do
 #TODO: Removing php 7.0 for now since some of our composer packages dont support it. http://jira.klinche.com/browse/KI-1062
 script 'Add PHP 5.6-7.0 Repository' do
   interpreter 'bash'
@@ -12,6 +13,8 @@ script 'Add PHP 5.6-7.0 Repository' do
     apt-add-repository ppa:ondrej/apache2 -y
     apt-get update
   EOH
+end
+
 end
 
 apt_package 'php5' do
