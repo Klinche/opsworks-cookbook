@@ -67,7 +67,7 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
   end
 
   apache_module "http2" do
-    enable true
+    enable false
   end
 
   template_name = 'web_app.conf.erb'
