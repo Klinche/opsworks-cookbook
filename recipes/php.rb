@@ -152,6 +152,27 @@ script "Install LibSodium" do
   EOH
 end
 
+template '/etc/php/7.0/mods-available/apcu_bc.ini' do
+  source 'extension.ini.erb'
+  mode 0666
+  group 'root'
+  owner 'root'
+  variables({
+                :extension_line => 'apc.so'
+            })
+end
+
+script "Install APCU BC" do
+  interpreter 'bash'
+  user 'root'
+  code <<-EOH
+      pecl channel-update pecl.php.net
+      printf "\n" | pecl install apcu_bc-beta
+      phpenmod apcu_bc
+  EOH
+end
+
+
 template '/etc/php/7.0/mods-available/uopz.ini' do
   source 'extension.ini.erb'
   mode 0666
