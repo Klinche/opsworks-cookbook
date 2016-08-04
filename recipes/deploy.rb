@@ -34,20 +34,6 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
   release_user = node[:deploy]["#{app[:shortname]}"][:release_user]
   release_group = node[:deploy]["#{app[:shortname]}"][:release_group]
 
-  file_input 'apache-access' do
-    name 'apache-access'
-    severity 'info'
-    facility 'apache2'
-    file '/var/log/apache2/access.log'
-  end
-
-  file_input 'apache-error' do
-    name 'apache-error'
-    severity 'error'
-    facility 'apache2'
-    file '/var/log/apache2/error.log'
-  end
-
   if app[:shortname] == 'vagrant'
     is_vagrant = true
     deploy_to = "/vagrant"
