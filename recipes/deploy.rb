@@ -106,8 +106,23 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     server_name app['domains'].first
   end
 
+  rsyslog_file_input 'apache-access' do
+    name 'apache-access'
+    severity 'info'
+    facility 'local0'
+    file "/var/log/apache2/#{app[:shortname]}-access.log"
+  end
 
+  rsyslog_file_input 'apache-error' do
+    name 'apache-error'
+    severity 'error'
+    facility 'local0'
+    file "/var/log/apache2/#{app[:shortname]}-error.log"
+  end
 
+  service "rsyslog" do
+    action :restart
+  end
 
   if is_vagrant == false
 

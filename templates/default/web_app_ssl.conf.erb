@@ -49,6 +49,9 @@
 
     SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
 
+    ErrorLog ${APACHE_LOG_DIR}/<%= @params[:application_name] %>-error.log
+    CustomLog ${APACHE_LOG_DIR}/<%= @params[:application_name] %>-access.log combined
+
 </VirtualHost>
 
 # intermediate configuration, tweak to your needs
