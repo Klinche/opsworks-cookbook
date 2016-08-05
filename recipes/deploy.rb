@@ -111,6 +111,7 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     severity 'info'
     facility 'local0'
     file "/var/log/apache2/#{app[:shortname]}-access.log"
+    cookbook_source 'opsworks-cookbook'
   end
 
   rsyslog_file_input 'apache-error' do
@@ -118,6 +119,7 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     severity 'error'
     facility 'local0'
     file "/var/log/apache2/#{app[:shortname]}-error.log"
+    cookbook_source 'opsworks-cookbook'
   end
 
   service "rsyslog" do
