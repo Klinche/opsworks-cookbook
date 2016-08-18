@@ -17,6 +17,10 @@
         Allow from All
     </IfModule>
   </Directory>
+  
+  ErrorLog /var/log/apache2/<%= @params[:application_name] %>-error.log
+  CustomLog /var/log/apache2/<%= @params[:application_name] %>-access.log combined
+  
 </VirtualHost>
 
 <VirtualHost *:443>
@@ -49,8 +53,8 @@
 
     SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
 
-    ErrorLog ${APACHE_LOG_DIR}/<%= @params[:application_name] %>-error.log
-    CustomLog ${APACHE_LOG_DIR}/<%= @params[:application_name] %>-access.log combined
+    ErrorLog /var/log/apache2/<%= @params[:application_name] %>-error.log
+    CustomLog /var/log/apache2/<%= @params[:application_name] %>-access.log combined
 
 </VirtualHost>
 
