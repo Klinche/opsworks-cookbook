@@ -96,12 +96,10 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     end
   elsif is_vagrant
     template_name = 'web_app_ssl_vagrant.conf.erb'
-    ssl_certificate "#{app[:domains].first}" do
+    cert = ssl_certificate "#{app[:domains].first}" do
       key_path "/etc/apache2/ssl/#{app[:domains].first}.key"
       key_mode 00640
       cert_path "/etc/apache2/ssl/#{app[:domains].first}.crt"
-      chain_path "/etc/apache2/ssl/#{app[:domains].first}_chain.crt"
-      ca_cert_path "/etc/apache2/ssl/#{app[:domains].first}_ca.crt"
       common_name "#{app[:domains].first}"
       namespace "#{app[:domains].first}"
       domain "#{app[:domains].first}"
@@ -112,15 +110,33 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
       department "Software"
       email "testing@vagrant.com"
       subject_alternate_names app[:domains]
+      key_source 'self-signed'
+      cert_source 'self-signed'
+    end
+
+    include_recipe 'apache2'
+    include_recipe 'apache2::mod_ssl'
+    web_app "#{app[:shortname]}" do
+      cookbook 'ssl_certificate'
+      server_name cert.common_name
+      server_aliases app[:domains]
+      docroot "#{symbolic_release_path}/web"
+      ssl_key cert.key_path
+      ssl_cert cert.cert_path
+      ssl_chain cert.chain_path
+      application_name app[:shortname]
+      server_name app[:domains].first
     end
   end
 
-  web_app "#{app[:shortname]}" do
-    template template_name
-    server_aliases app['domains']
-    docroot "#{symbolic_release_path}/web"
-    application_name app[:shortname]
-    server_name app[:domains].first
+  if is_vagrant == false
+    web_app "#{app[:shortname]}" do
+      template template_name
+      server_aliases app[:domains]
+      docroot "#{symbolic_release_path}/web"
+      application_name app[:shortname]
+      server_name app[:domains].first
+    end
   end
 
   rsyslog_file_input 'apache-access' do
