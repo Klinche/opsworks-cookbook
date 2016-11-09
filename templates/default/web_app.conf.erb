@@ -26,5 +26,5 @@ CustomLog ${APACHE_LOG_DIR}/<%= @params[:application_name] %>-access.log combine
       RewriteCond %{HTTP:X-Forwarded-Proto} =http
       RewriteRule . https://%{HTTP:Host}%{REQUEST_URI} [L,R=permanent]
   </IfModule>
-  
+
 </VirtualHost>

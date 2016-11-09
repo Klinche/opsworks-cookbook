@@ -15,7 +15,7 @@ end
 
 search('aws_opsworks_app', 'deploy:true').each do |app|
   Chef::Log.info("********** Starting To Deploy App: '#{app[:name]}' **********")
-  
+
   hostfile_ip = node[:deploy]["#{app[:shortname]}"].key?(:hostfile_entry) ?  node[:deploy]["#{app[:shortname]}"][:hostfile_entry] : '127.0.2.1'  
   hostfile_name = node[:deploy]["#{app[:shortname]}"].key?(:hostfile_name) ?  node[:deploy]["#{app[:shortname]}"][:hostfile_name] : 'localhost1'  
 
@@ -26,7 +26,6 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     action    :create
   end
 
-  is_vagrant = false
   deploy_to = "/srv/www/#{app[:shortname]}"
 
   symbolic_release_path = "/srv/www/#{app[:shortname]}/current"
@@ -72,7 +71,7 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
 
   template_name = 'web_app.conf.erb'
 
-  if app['enable_ssl']
+  if app['enable_ssl'] and is_vagrant == false
     template_name = 'web_app_ssl.conf.erb'
 
     file "/etc/apache2/ssl/#{app['domains'].first}.crt" do
@@ -95,7 +94,14 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
       group 'root'
       mode '0644'
     end
-
+  elsif is_vagrant
+    template_name = 'web_app_ssl.conf.erb'
+    ssl_certificate 'vagrant.portal.klinche.com' do
+      key_path "/etc/apache2/ssl/#{app[:domains].first}.key"
+      key_mode 00640
+      cert_path "/etc/apache2/ssl/#{app[:domains].first}.crt"
+      chain_path "/etc/apache2/ssl/#{app[:domains].first}_ca.crt"
+    end
   end
 
   web_app "#{app[:shortname]}" do
@@ -103,7 +109,7 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
     server_aliases app['domains']
     docroot "#{symbolic_release_path}/web"
     application_name app[:shortname]
-    server_name app['domains'].first
+    server_name app[:domains].first
   end
 
   rsyslog_file_input 'apache-access' do
