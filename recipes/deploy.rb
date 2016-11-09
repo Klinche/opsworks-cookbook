@@ -71,7 +71,7 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
 
   template_name = 'web_app.conf.erb'
 
-  if app['enable_ssl'] and is_vagrant == false
+  if app['enable_ssl']
     template_name = 'web_app_ssl.conf.erb'
 
     file "/etc/apache2/ssl/#{app['domains'].first}.crt" do
@@ -94,49 +94,14 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
       group 'root'
       mode '0644'
     end
-  elsif is_vagrant
-    template_name = 'web_app_ssl_vagrant.conf.erb'
-    cert = ssl_certificate "#{app[:domains].first}" do
-      key_path "/etc/apache2/ssl/#{app[:domains].first}.key"
-      key_mode 00640
-      cert_path "/etc/apache2/ssl/#{app[:domains].first}.crt"
-      common_name "#{app[:domains].first}"
-      namespace "#{app[:domains].first}"
-      domain "#{app[:domains].first}"
-      country "USA"
-      city "Santa Clara"
-      state "CA"
-      organization "Vagrant"
-      department "Software"
-      email "testing@vagrant.com"
-      subject_alternate_names app[:domains]
-      key_source 'self-signed'
-      cert_source 'self-signed'
-    end
-
-    include_recipe 'apache2'
-    include_recipe 'apache2::mod_ssl'
-    web_app "#{app[:shortname]}" do
-      cookbook 'ssl_certificate'
-      server_name cert.common_name
-      server_aliases app[:domains]
-      docroot "#{symbolic_release_path}/web"
-      ssl_key cert.key_path
-      ssl_cert cert.cert_path
-      ssl_chain cert.chain_path
-      application_name app[:shortname]
-      server_name app[:domains].first
-    end
   end
 
-  if is_vagrant == false
-    web_app "#{app[:shortname]}" do
-      template template_name
-      server_aliases app[:domains]
-      docroot "#{symbolic_release_path}/web"
-      application_name app[:shortname]
-      server_name app[:domains].first
-    end
+  web_app "#{app[:shortname]}" do
+    template template_name
+    server_aliases app['domains']
+    docroot "#{symbolic_release_path}/web"
+    application_name app[:shortname]
+    server_name app[:domains].first
   end
 
   rsyslog_file_input 'apache-access' do
