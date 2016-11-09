@@ -100,6 +100,8 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
       key_path "/etc/apache2/ssl/#{app[:domains].first}.key"
       key_mode 00640
       cert_path "/etc/apache2/ssl/#{app[:domains].first}.crt"
+      common_name "#{app[:domains].first}"
+      namespace "#{app[:domains].first}"
     end
   end
 
