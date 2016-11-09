@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d09e9d3a-5c95-4686-a7bc-3cdff5c18224" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/recipes/deploy.rb" afterPath="$PROJECT_DIR$/recipes/deploy.rb" />
     </list>
     <ignored path="opsworks-cookbook.iws" />
@@ -37,8 +36,8 @@
       <file leaf-file-name="deploy.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/recipes/deploy.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="103" column="40" selection-start-line="103" selection-start-column="40" selection-end-line="103" selection-end-column="40" />
+            <state relative-caret-position="335">
+              <caret line="101" column="7" selection-start-line="101" selection-start-column="7" selection-end-line="101" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -748,12 +747,12 @@
       <workItem from="1478633500848" duration="335000" />
       <workItem from="1478659151296" duration="1047000" />
       <workItem from="1478663317689" duration="19000" />
-      <workItem from="1478666761784" duration="1184000" />
+      <workItem from="1478666761784" duration="1676000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2585000" />
+    <option name="totallyTimeSpent" value="3077000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1854" height="1107" extended-state="0" />
@@ -907,8 +906,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/recipes/deploy.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="103" column="40" selection-start-line="103" selection-start-column="40" selection-end-line="103" selection-end-column="40" />
+        <state relative-caret-position="335">
+          <caret line="101" column="7" selection-start-line="101" selection-start-column="7" selection-end-line="101" selection-end-column="7" />
           <folding />
         </state>
       </provider>

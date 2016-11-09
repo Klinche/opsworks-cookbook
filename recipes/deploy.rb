@@ -100,8 +100,18 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
       key_path "/etc/apache2/ssl/#{app[:domains].first}.key"
       key_mode 00640
       cert_path "/etc/apache2/ssl/#{app[:domains].first}.crt"
+      chain_path "/etc/apache2/ssl/#{app[:domains].first}_chain.crt"
+      ca_cert_path "/etc/apache2/ssl/#{app[:domains].first}_ca.crt"
       common_name "#{app[:domains].first}"
       namespace "#{app[:domains].first}"
+      domain "#{app[:domains].first}"
+      country "USA"
+      city "Santa Clara"
+      state "CA"
+      organization "Vagrant"
+      department "Software"
+      email "testing@vagrant.com"
+      subject_alternate_names app[:domains]
     end
   end
 
