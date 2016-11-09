@@ -95,12 +95,11 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
       mode '0644'
     end
   elsif is_vagrant
-    template_name = 'web_app_ssl.conf.erb'
-    ssl_certificate 'vagrant.portal.klinche.com' do
+    template_name = 'web_app_ssl_vagrant.conf.erb'
+    ssl_certificate "#{app[:domains].first}" do
       key_path "/etc/apache2/ssl/#{app[:domains].first}.key"
       key_mode 00640
       cert_path "/etc/apache2/ssl/#{app[:domains].first}.crt"
-      chain_path "/etc/apache2/ssl/#{app[:domains].first}_ca.crt"
     end
   end
 
