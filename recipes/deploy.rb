@@ -33,6 +33,8 @@ search('aws_opsworks_app', 'deploy:true').each do |app|
   release_user = node[:deploy]["#{app[:shortname]}"][:release_user]
   release_group = node[:deploy]["#{app[:shortname]}"][:release_group]
 
+  is_vagrant = false
+
   if app[:shortname] == 'vagrant'
     is_vagrant = true
     deploy_to = "/vagrant"
