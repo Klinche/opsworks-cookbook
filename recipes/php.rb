@@ -2,21 +2,6 @@ apt_package 'python-software-properties' do
   action :upgrade
 end
 
- if node['platform'] != 'ubuntu' && node['platform_version'] != '16.04'
-#TODO: Removing php 7.0 for now since some of our composer packages dont support it. http://jira.klinche.com/browse/KI-1062
-script 'Add PHP 5.6-7.0 Repository' do
-  interpreter 'bash'
-  user 'root'
-  code <<-EOH
-    add-apt-repository ppa:chris-lea/libsodium -y
-    add-apt-repository ppa:ondrej/php -y
-    apt-add-repository ppa:ondrej/apache2 -y
-    apt-get update
-  EOH
-end
-
-end
-
 apt_package 'php5' do
   action :purge
 end
@@ -85,23 +70,6 @@ end
     EOH
   end
 end
-
-script "Reset Blackfire and NewRelic" do
-  interpreter 'bash'
-  user 'root'
-  code <<-EOH
-      sudo mv /etc/php5/mods-available/newrelic.ini /etc/php/7.0/mods-available/ 2>/dev/null || true
-      sudo mv /etc/php5/mods-available/blackfire.ini /etc/php/7.0/mods-available/ 2>/dev/null || true
-      rm -rf /etc/php5
-      rm -rf /etc/php/5.6
-      rm -rf /usr/lib/php5
-      ln -s /usr/lib/blackfire-php/amd64/blackfire-20151012.so /usr/lib/php/20151012/blackfire.so
-      ln -s /usr/lib/newrelic-php5/agent/x64/newrelic-20151012.so /usr/lib/php/20151012/newrelic.so
-      phpenmod newrelic
-      phpenmod blackfire
-  EOH
-end
-
 
 script "Enable MCrypt" do
   interpreter 'bash'
@@ -201,5 +169,3 @@ end
 service "apache2" do
   action :restart
 end
-
-# php5-xsl php-apc  php5-memcache
